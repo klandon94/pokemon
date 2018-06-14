@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Pokédex</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        #pokemon{
+            width: 75%;
+            display:inline-block;
+        }
+
+        #pokedex{
+            display:inline-block;
+            vertical-align:top;
+            border: 20px solid red;
+            height:475px;
+            width:200px;
+            text-transform: capitalize;
+        }
+
+        #pokedex h1{
+            text-align: center;
+        }
+
+        #pokedex img{
+            padding-left:22px;
+        }
+        
+        #pokedex h4, p, li{
+            padding-left:10px;
+        }
+
+    </style>
+    <script type = "text/javascript">
+   
+        function installPokemons(){
+            for (var i = 1; i<152; i++){
+                $("#pokemon").append('<img id="' + i + '" src="' + 'http://pokeapi.co/media/img/' + i + '.png">\n');  
+            }
+        }
+
+        $(document).ready(function(){
+            
+            installPokemons();
+
+            $('img').click(function(){
+                var ider = $(this).attr('id');
+                $.get('https://pokeapi.co/api/v2/pokemon/' + ider, function(data){
+                    $('#pokedex').html('<h1>' + data.name + '</h1>');
+                    $('#pokedex').append('<img src="' + 'http://pokeapi.co/media/img/' + ider + '.png">');
+                    $('#pokedex').append('<h4>Types</h4><ul>');
+                    for (var i = 0; i < data.types.length; i++){
+                        $('#pokedex').append('<li>' + data.types[i].type.name + '</li>');
+                    }
+                    $('#pokedex').append('</ul>');
+                    $('#pokedex').append('<h4>Height</h4><p>' + data.height + '</p>');
+                    $('#pokedex').append('<h4>Weight</h4><p>' + data.weight + '</p>');
+                }, 'json');
+            })
+        
+        });
+
+    </script>
+    
+</head>
+<body>
+    <div id="pokemon"></div>
+    <div id="pokedex"></div>
+</body>
+</html>
+
